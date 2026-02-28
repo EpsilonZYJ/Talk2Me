@@ -10,27 +10,24 @@ import SwiftUI
 // MARK: - Settings View
 
 struct SettingsView: View {
-    @State private var notificationsEnabled = true
-    @State private var darkModeEnabled = false
-    @State private var fontSize: Double = 16
+    @StateObject var appSettings = AppSettings.shared
     
     var body: some View {
         NavigationView {
             Form {
                 Section("通用设置") {
-                    Toggle("推送通知", isOn: $notificationsEnabled)
-                    Toggle("深色模式", isOn: $darkModeEnabled)
-                }
+                    Toggle("推送通知", isOn: $appSettings.notificationsEnabled)
+                    // TODO: 添加可选择的显示模式设置
+                 }
                 
                 Section("编辑器设置") {
                     HStack {
                         Text("字体大小")
-                            .font(.system(size:fontSize))
                         Spacer()
-                        Text("\(Int(fontSize))pt")
+                        Text("\(Int(appSettings.fontSize))pt")
                             .foregroundColor(.secondary)
                     }
-                    Slider(value: $fontSize, in: 12 ... 24, step: 1)
+                    Slider(value: $appSettings.fontSize, in: 12 ... 24, step: 1)
                 }
                 
                 Section("关于应用") {
@@ -65,6 +62,7 @@ struct SettingsView: View {
             }
             .navigationTitle("设置")
             .navigationBarTitleDisplayMode(.large)
+            .font(.system(size: appSettings.fontSize))
         }
     }
 }
